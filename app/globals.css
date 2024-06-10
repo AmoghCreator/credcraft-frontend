@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.react-aria-ProgressBar {
+  display: grid;
+  grid-template-areas: "label value"
+                       "bar bar";
+  grid-template-columns: 1fr auto;
+  width: 100%;
+  color: black;
+
+  .value {
+    grid-area: value;
+  }
+
+  .bar {
+    grid-area: bar;
+    forced-color-adjust: none;
+    height: 0.4em;
+    border-radius: 5px;
+    overflow: hidden;
+    will-change: transform;
+  }
+
+}
