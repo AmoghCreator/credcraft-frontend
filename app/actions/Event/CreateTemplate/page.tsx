@@ -12,10 +12,20 @@ import {
   Modal,
   DialogTrigger,
   Dialog,
+  TextField,
+  Input,
+  Label,
+  Popover,
+  ListBox,
+  ListBoxItem,
+  ComboBox,
+  Select,
+  SelectValue,
 } from 'react-aria-components';
 import axios from 'axios';
 import Numberline from '@/components/Numberline';
 import {useRouter} from 'next/navigation';
+import Image from 'next/image';
 
 const PdfCreator = () => {
   const [pdfUrl, setPdfUrl] = useState(null);
@@ -29,6 +39,22 @@ const PdfCreator = () => {
   const [pageProps, setPageProps] = useState({});
   const [file, setFile] = useState(null);
   const [retrievedFileURL, setRetrievedFileURL] = useState('');
+  const [textFields, setTextFields] = useState([
+    {
+      text: 'ghoda',
+      xPos: 0,
+      yPos: 100,
+      fontSize: 24,
+      font: 'Poppins-Medium.ttf',
+    },
+    {
+      text: 'hoda-thoda',
+      xPos: 0,
+      yPos: 150,
+      fontSize: 80,
+      font: 'DancingScript-VariableFont_wght.ttf',
+    },
+  ]);
   const router = useRouter();
 
   async function handleSubmit() {
@@ -37,10 +63,11 @@ const PdfCreator = () => {
     FormDataSend.append('templateFile', file);
     FormDataSend.set('directoryName', localStorage.getItem('directoryName'));
     FormDataSend.append('certTemplate', file.name.split('.pdf')[0]);
-    FormDataSend.append('font', 'Pacifico-Regular');
+    FormDataSend.append('font', 'Pacifico-Regular.ttf');
     FormDataSend.append('list', localStorage.getItem('list'));
     FormDataSend.append('xPos', formData.xPos);
     FormDataSend.append('yPos', formData.yPos);
+    FormDataSend.append('textFields', JSON.stringify(textFields));
     await axios.post('http://127.0.0.1:8080/api/user/genAndUp', FormDataSend, {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -72,6 +99,103 @@ const PdfCreator = () => {
       ...prevData,
       yPos: slideValue,
     }));
+  }
+
+  function handleXaxisTextField(index, slideValue) {
+    setTextFields(prevTextFields => {
+      // Ensure the index is within bounds
+      if (index >= 0 && index < prevTextFields.length) {
+        // Create a shallow copy of the array
+        const updatedTextFields = [...prevTextFields];
+
+        // Create a copy of the specific field object
+        const updatedField = {...updatedTextFields[index], xPos: slideValue};
+
+        // Update the array with the modified field
+        updatedTextFields[index] = updatedField;
+
+        console.log(index);
+        console.log(updatedTextFields);
+
+        // Return the updated array to set the state
+        return updatedTextFields;
+      }
+
+      // If the index is out of bounds, return the previous state unchanged
+      return prevTextFields;
+    });
+  }
+
+  function handleYaxisTextField(index, slideValue) {
+    setTextFields(prevTextFields => {
+      // Ensure the index is within bounds
+      if (index >= 0 && index < prevTextFields.length) {
+        // Create a shallow copy of the array
+        const updatedTextFields = [...prevTextFields];
+
+        // Create a copy of the specific field object
+        const updatedField = {...updatedTextFields[index], yPos: slideValue};
+
+        // Update the array with the modified field
+        updatedTextFields[index] = updatedField;
+
+        console.log(index);
+        console.log(updatedTextFields);
+
+        // Return the updated array to set the state
+        return updatedTextFields;
+      }
+
+      // If the index is out of bounds, return the previous state unchanged
+      return prevTextFields;
+    });
+  }
+
+  function handleTextFieldInput(index, e) {
+    setTextFields(prevTextFields => {
+      const updatedTextField = [...prevTextFields];
+      const updatedField = {...updatedTextField[index], text: e.target.value};
+      updatedTextField[index] = updatedField;
+      return updatedTextField;
+    });
+  }
+
+  function handleFontSizeInput(index, e) {
+    if (e.target.value >= 1) {
+      setTextFields(prevTextFields => {
+        const updatedTextField = [...prevTextFields];
+        const updatedField = {
+          ...updatedTextField[index],
+          fontSize: parseInt(e.target.value),
+        };
+        updatedTextField[index] = updatedField;
+        return updatedTextField;
+      });
+    }
+  }
+
+  function handleFontSelection(index, e) {
+    setTextFields(prevTextFields => {
+      const updatedTextField = [...prevTextFields];
+      const updatedField = {
+        ...updatedTextField[index],
+        font: e,
+      };
+      updatedTextField[index] = updatedField;
+      return updatedTextField;
+    });
+    console.log(e);
+  }
+
+  function addTextField() {
+    const sampleTextField = {
+      text: 'sample field',
+      xPos: 0,
+      yPos: 0,
+      fontSize: 24,
+      font: 'Poppins-Medium.ttf',
+    };
+    setTextFields([...textFields, sampleTextField]);
   }
 
   const createPdf = async base64String => {
@@ -110,6 +234,17 @@ const PdfCreator = () => {
       weight: 700,
     });
 
+    textFields.forEach(elm => {
+      firstPage.drawText(String(elm.text), {
+        x: width / 2 - (elm.text.length * elm.fontSize) / 3.5 - elm.xPos,
+        y: height - height / 2 - elm.yPos,
+        size: elm.fontSize,
+        font: elm.Font,
+        color: rgb(0, 0, 0),
+        weight: 700,
+      });
+    });
+
     const pdfBytes = await pdfDoc.save();
     const pdfBlob = new Blob([pdfBytes], {type: 'application/pdf'});
     const pdfUrl = URL.createObjectURL(pdfBlob);
@@ -122,7 +257,7 @@ const PdfCreator = () => {
     if (base64String) {
       createPdf(base64String);
     }
-  }, [formData]);
+  }, [formData, textFields]);
 
   async function handleFileSelect(e) {
     const file = e[0];
@@ -140,7 +275,7 @@ const PdfCreator = () => {
   return (
     <>
       <div className="w-full h-[89vh] flex flex-row items-center justify-center gap-8 p-8 bg-gray-100">
-        <div className="w-1/4 bg-white shadow-lg rounded-lg px-6 py-8 flex flex-col items-center gap-6 h-full">
+        <div className="w-1/4 bg-white shadow-lg rounded-lg px-6 py-8 flex flex-col items-center gap-6 h-full overflow-scroll">
           <Numberline className="w-full" value={50} />
           <div className="flex flex-col items-center justify-center">
             <h1 className="text-2xl py-4 font-bold">
@@ -159,10 +294,25 @@ const PdfCreator = () => {
                     {({close}) => (
                       <div className="w-full h-full flex flex-row justify-center flex-wrap gap-2 border-2 border-black rounded-xl p-9 overflow-scroll">
                         <FileTrigger onSelect={handleFileSelect}>
-                          <Button className="w-1/5 h-1/2 py-3 bg-sky-500 text-white text-l font-bold rounded-lg transition duration-300 ease-in-out hover:bg-sky-600">
-														Upload your own
+                          <Button className="w-1/5 h-1/2 py-3 bg-sky-500 text-white text-l font-bold rounded-xl transition duration-300 ease-in-out hover:bg-sky-600">
+                            Upload your own
                           </Button>
                         </FileTrigger>
+                        <a
+                          href="https://www.canva.com/templates/?query=certificate"
+                          className="flex flex-col items-center justify-center w-1/5 h-1/2 py-3 border-2 border-black bg-white text-xl font-bold rounded-xl transition-all duration-300 ease-in-out hover:bg-white border-purple-600 bg-cyan-100 hover:border-black text-purple-700 hover:text-black"
+                        >
+                          <Button>
+                            Go to
+                            <span className="text-3xl block italic">
+                              <Image
+                                src="/Canva_Logo.svg.png"
+                                width={150}
+                                height={100}
+                              />
+                            </span>
+                          </Button>
+                        </a>
                         <div
                           className="w-1/5 h-1/2 border-2 border-black rounded-xl py-2 cursor-pointer text-center flex justify-center items-center hover:bg-gray-100"
                           value="template1.html"
@@ -204,45 +354,145 @@ const PdfCreator = () => {
                   </Dialog>
                 </Modal>
               </DialogTrigger>
-              <div className="w-full flex flex-col gap-4">
-                <div className="flex items-center">
-                  <h1 className="w-1/6">X Axis</h1>
-                  <Slider
-                    key={0}
-                    minValue={
-                      -(pageProps.width / 2 - (formData.Name.length * 24) / 3.5)
-                    }
-                    maxValue={
-                      pageProps.width / 2 - (formData.Name.length * 24) / 3.5
-                    }
-                    defaultValue={0}
-                    className="w-full"
-                    onChange={handleXaxis}
-                  >
-                    <SliderOutput />
-                    <SliderTrack className="p-1 bg-gray-300 rounded-lg">
-                      <SliderThumb className="p-3 bg-sky-500 rounded-full shadow-md" />
-                    </SliderTrack>
-                  </Slider>
+              <div className="w-full overflow-scroll">
+                <div className="w-full flex flex-col gap-4">
+                  <h1 className="font-bold">Name</h1>
+                  <div className="flex items-center">
+                    <h1 className="w-1/6">X Axis</h1>
+                    <Slider
+                      key={0}
+                      minValue={
+                        -(
+                          pageProps.width / 2 -
+                          (formData.Name.length * 24) / 3.5
+                        )
+                      }
+                      maxValue={
+                        pageProps.width / 2 - (formData.Name.length * 24) / 3.5
+                      }
+                      defaultValue={0}
+                      className="w-full"
+                      onChange={handleXaxis}
+                    >
+                      <SliderOutput />
+                      <SliderTrack className="p-1 bg-gray-300 rounded-lg">
+                        <SliderThumb className="p-3 bg-sky-500 rounded-full shadow-md" />
+                      </SliderTrack>
+                    </Slider>
+                  </div>
+                  <div className="flex items-center">
+                    <h1 className="w-1/6">Y Axis</h1>
+                    <Slider
+                      key={1}
+                      minValue={-pageProps.height / 2}
+                      maxValue={pageProps.height / 2}
+                      defaultValue={0}
+                      className="w-full"
+                      onChange={handleYaxis}
+                    >
+                      <SliderOutput />
+                      <SliderTrack className="p-1 bg-gray-300 rounded-lg">
+                        <SliderThumb className="p-3 bg-sky-500 rounded-full shadow-md" />
+                      </SliderTrack>
+                    </Slider>
+                  </div>
                 </div>
-                <div className="flex items-center">
-                  <h1 className="w-1/6">Y Axis</h1>
-                  <Slider
-                    key={1}
-                    minValue={-pageProps.height / 2}
-                    maxValue={pageProps.height / 2}
-                    defaultValue={0}
-                    className="w-full"
-                    onChange={handleYaxis}
-                  >
-                    <SliderOutput />
-                    <SliderTrack className="p-1 bg-gray-300 rounded-lg">
-                      <SliderThumb className="p-3 bg-sky-500 rounded-full shadow-md" />
-                    </SliderTrack>
-                  </Slider>
-                </div>
+                {textFields.map((elm, index) => (
+                  <div className="w-full flex flex-col gap-4 mt-4">
+                    <h1 className="font-bold">{'Field ' + (index + 1)}</h1>{' '}
+                    <TextField className="">
+                      <Label>text</Label>
+                      <Input
+                        className="ml-4 border-2 border-transparent border-b-blue-300 w-5/6"
+                        onChange={e => handleTextFieldInput(index, e)}
+                      />
+                    </TextField>
+                    <div className="w-full flex gap-2">
+                      <TextField className="w-fit flex gap-2">
+                        <Label>font size</Label>
+                        <Input
+                          className="border-2 border-black border-b-blue-300 w-8"
+                          onChange={e => handleFontSizeInput(index, e)}
+                        />
+                        <Label>px</Label>
+                      </TextField>{' '}
+                      <Select
+                        onSelectionChange={e => handleFontSelection(index, e)}
+                      >
+                        <Label>Favorite Animal</Label>
+                        <Button>
+                          <SelectValue />
+                          <span aria-hidden="true">▼</span>
+                        </Button>
+                        <Popover>
+                          <ListBox>
+                            <ListBoxItem id="Pacifico-Regular.ttf">
+                              Pacifico
+                            </ListBoxItem>
+                            <ListBoxItem
+                              id="
+                              DancingScript-VariableFont_wght.ttf
+"
+                            >
+                              DancingScript
+                            </ListBoxItem>
+                          </ListBox>
+                        </Popover>
+                      </Select>
+                    </div>
+                    <div className="flex items-center">
+                      <h1 className="w-1/6">X Axis</h1>
+
+                      <Slider
+                        key={0}
+                        minValue={
+                          -(
+                            pageProps.width / 2 -
+                            (formData.Name.length * 24) / 3.5
+                          )
+                        }
+                        maxValue={
+                          pageProps.width / 2 -
+                          (formData.Name.length * 24) / 3.5
+                        }
+                        defaultValue={0}
+                        className="w-full"
+                        onFocus={() => handleFocus(index)}
+                        onChange={value => handleXaxisTextField(index, value)}
+                      >
+                        <SliderOutput />
+                        <SliderTrack className="p-1 bg-gray-300 rounded-lg">
+                          <SliderThumb className="p-3 bg-sky-500 rounded-full shadow-md" />
+                        </SliderTrack>
+                      </Slider>
+                    </div>
+                    <div className="flex items-center">
+                      <h1 className="w-1/6">Y Axis</h1>
+                      <Slider
+                        key={1}
+                        minValue={-pageProps.height / 2}
+                        maxValue={pageProps.height / 2}
+                        defaultValue={0}
+                        className="w-full"
+                        onFocus={() => handleFocus(index)}
+                        onChange={value => handleYaxisTextField(index, value)}
+                      >
+                        <SliderOutput />
+                        <SliderTrack className="p-1 bg-gray-300 rounded-lg">
+                          <SliderThumb className="p-3 bg-sky-500 rounded-full shadow-md" />
+                        </SliderTrack>
+                      </Slider>
+                    </div>
+                  </div>
+                ))}
               </div>
-              <div className="w-full flex flex-col gap-4 mt-6">
+              <div className="w-full flex flex-col gap-4 mt-6 items-center">
+                <Button
+                  className="w-1/3 py-3 bg-sky-500 text-white text-xl font-bold rounded-lg transition duration-300 ease-in-out hover:bg-sky-600"
+                  onClick={addTextField}
+                >
+                  +
+                </Button>
                 <Button className="w-full py-3 bg-gray-300 text-gray-700 text-xl font-bold rounded-lg">
                   <a href={pdfUrl} download="generated.pdf">
                     Download Sample
@@ -264,6 +514,13 @@ const PdfCreator = () => {
             <iframe
               src={`${pdfUrl}#toolbar=0`}
               className="w-full h-full"
+              style={{
+                border: 'none',
+                width: '100%',
+                height: '100%',
+                display: 'block',
+              }}
+              allowFullScreen
             ></iframe>
           </div>
         )}
