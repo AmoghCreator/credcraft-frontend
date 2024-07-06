@@ -41,7 +41,7 @@ export default function UploadData() {
     formData.append('csvFile', e.target[1].files[0]);
     console.log(e.target[1].files[0]);
     let resp = await axios.post(
-      `${process.env.ENDPOINT}/api/user/csvToJson`,
+      `${process.env.NEXT_PUBLIC_ENDPOINT}/api/user/csvToJson`,
       formData,
       {
         headers: {

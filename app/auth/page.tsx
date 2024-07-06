@@ -21,10 +21,11 @@ export default function Auth({}) {
   }
 
   async function handleLogin(e) {
+		console.log(process.env.NEXT_PUBLIC_ENDPOINT)
     e.preventDefault();
     const username = e.target[0].attributes.value.value;
     const password = e.target[1].attributes.value.value;
-    let data = await axios.post(`${process.env.ENDPOINT}/api/user/login`, {
+    let data = await axios.post(`${process.env.NEXT_PUBLIC_ENDPOINT}/api/user/login`, {
       name: username,
       password: password,
     });
@@ -41,7 +42,7 @@ export default function Auth({}) {
     const username = e.target[0].attributes.value.value;
     const email = e.target[1].attributes.value.value;
     const password = e.target[2].attributes.value.value;
-    let data = await axios.post(`${process.env.ENDPOINT}/api/user/signup`, {
+    let data = await axios.post(`${process.env.NEXT_PUBLIC_ENDPOINT}/api/user/signup`, {
       name: username,
       password: password,
     });

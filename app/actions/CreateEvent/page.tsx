@@ -11,7 +11,7 @@ export default function CreateEvent() {
   useEffect(() => {
     const token = localStorage.getItem('usrToken');
     axios
-      .get(`${process.env.ENDPOINT}/api/user/get_dir`, {
+      .get(`${process.env.NEXT_PUBLIC_ENDPOINT}/api/user/get_dir`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -28,7 +28,7 @@ export default function CreateEvent() {
     let token = localStorage.getItem('usrToken');
     const dirName = e.target[0].attributes.value.value;
     let data = await axios.post(
-      `${process.env.ENDPOINT}/api/user/create_dir`,
+      `${process.env.NEXT_PUBLIC_ENDPOINT}/api/user/create_dir`,
       {
         directoryName: dirName,
       },
@@ -45,7 +45,7 @@ export default function CreateEvent() {
   async function handleDirGet(e) {
     let token = localStorage.getItem('usrToken');
     let data = await axios
-      .get(`${process.env.ENDPOINT}/api/user/get_dir`, {
+      .get(`${process.env.NEXT_PUBLIC_ENDPOINT}/api/user/get_dir`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
