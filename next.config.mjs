@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   env: {
-    ENDPOINT: 'http://127.0.0.1:8080',
+    ENDPOINT: `${process.env.NEXT_PUBLIC_ENDPOINT}`,
   },
   webpack5: true,
   webpack: config => {

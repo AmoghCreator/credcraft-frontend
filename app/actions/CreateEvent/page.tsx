@@ -4,14 +4,19 @@ import axios from 'axios';
 import {useState, useEffect} from 'react';
 import {useRouter} from 'next/navigation';
 
+interface dirListInterface {
+	directoryName : string;
+	createdAt : string;
+}
+
 export default function CreateEvent() {
-  const [dirList, setDir] = useState([{directoryName: 'Bingo'}]);
+  const [dirList, setDir] = useState<dirListInterface[]>();
   const router = useRouter();
 
   useEffect(() => {
     const token = localStorage.getItem('usrToken');
     axios
-      .get(`${process.env.ENDPOINT}/api/user/get_dir`, {
+      .get(`${process.env.NEXT_PUBLIC_ENDPOINT}/api/user/get_dir`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -23,12 +28,12 @@ export default function CreateEvent() {
     console.log(token);
   }, []);
 
-  async function handleDirCreate(e) {
+  async function handleDirCreate(e : any) {
     e.preventDefault();
     let token = localStorage.getItem('usrToken');
     const dirName = e.target[0].attributes.value.value;
     let data = await axios.post(
-      `${process.env.ENDPOINT}/api/user/create_dir`,
+      `${process.env.NEXT_PUBLIC_ENDPOINT}/api/user/create_dir`,
       {
         directoryName: dirName,
       },
@@ -42,10 +47,10 @@ export default function CreateEvent() {
     router.push('/actions/Event/UploadData');
   }
 
-  async function handleDirGet(e) {
+  async function handleDirGet() {
     let token = localStorage.getItem('usrToken');
     let data = await axios
-      .get(`${process.env.ENDPOINT}/api/user/get_dir`, {
+      .get(`${process.env.NEXT_PUBLIC_ENDPOINT}/api/user/get_dir`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -77,13 +82,14 @@ export default function CreateEvent() {
         <h1>Created At</h1>
       </div>
       <div className="overflow-scroll w-2/5">
-        {dirList.map((elm, num) => (
+        {dirList?.map((elm : any, num : any) => (
           <div
             className={
               num % 2 == 0
                 ? 'flex flex-row justify-between p-1 px-5'
                 : 'flex flex-row justify-between p-1 bg-sky-100 px-5'
             }
+						key={num}
           >
             <h1>{elm.directoryName}</h1>
             <h1>

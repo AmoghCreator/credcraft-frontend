@@ -3,7 +3,7 @@ import {Inter} from 'next/font/google';
 import Link from 'next/link';
 import './globals.css';
 import dotenv from 'dotenv';
-import store from './store';
+import store from '../store';
 import {Provider} from 'react-redux';
 
 dotenv.config();

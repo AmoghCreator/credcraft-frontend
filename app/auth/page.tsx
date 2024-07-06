@@ -16,15 +16,15 @@ export default function Auth({}) {
   const [auth, setAuth] = useState(false);
 	const router = useRouter();
 
-  function handleAuth(e) {
-    e.target.attributes.value.value === 'true' ? setAuth(false) : setAuth(true);
+  function handleAuth(e : any) {
+    e.target.attributes['data-value'].value === 'true' ? setAuth(false) : setAuth(true);
   }
 
-  async function handleLogin(e) {
+  async function handleLogin(e : any) {
     e.preventDefault();
     const username = e.target[0].attributes.value.value;
     const password = e.target[1].attributes.value.value;
-    let data = await axios.post(`${process.env.ENDPOINT}/api/user/login`, {
+    let data = await axios.post(`${process.env.NEXT_PUBLIC_ENDPOINT}/api/user/login`, {
       name: username,
       password: password,
     });
@@ -36,12 +36,12 @@ export default function Auth({}) {
 		}
   }
 
-  async function handleSignUp(e) {
+  async function handleSignUp(e : any) {
     e.preventDefault();
     const username = e.target[0].attributes.value.value;
     const email = e.target[1].attributes.value.value;
     const password = e.target[2].attributes.value.value;
-    let data = await axios.post(`${process.env.ENDPOINT}/api/user/signup`, {
+    let data = await axios.post(`${process.env.NEXT_PUBLIC_ENDPOINT}/api/user/signup`, {
       name: username,
       password: password,
     });
@@ -58,7 +58,7 @@ export default function Auth({}) {
           className={
             auth ? `text-2xl text-gray-400 cursor-pointer` : `text-2xl text-[#09B5FF] cursor-pointer`
           }
-          value={true}
+          data-value={true}
           onClick={handleAuth}
         >
           Login
@@ -68,7 +68,7 @@ export default function Auth({}) {
           className={
             auth ? `text-2xl text-[#09B5FF] cursor-pointer` : `text-2xl text-gray-400 cursor-pointer`
           }
-          value={false}
+          data-value={false}
           onClick={handleAuth}
         >
           SignUp

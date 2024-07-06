@@ -39,22 +39,7 @@ const PdfCreator = () => {
   const [pageProps, setPageProps] = useState({});
   const [file, setFile] = useState(null);
   const [retrievedFileURL, setRetrievedFileURL] = useState('');
-  const [textFields, setTextFields] = useState([
-    {
-      text: 'ghoda',
-      xPos: 0,
-      yPos: 100,
-      fontSize: 24,
-      font: 'Poppins-Medium.ttf',
-    },
-    {
-      text: 'hoda-thoda',
-      xPos: 0,
-      yPos: 150,
-      fontSize: 80,
-      font: 'DancingScript-VariableFont_wght.ttf',
-    },
-  ]);
+  const [textFields, setTextFields] = useState([]);
   const router = useRouter();
 
   async function handleSubmit() {
@@ -68,12 +53,16 @@ const PdfCreator = () => {
     FormDataSend.append('xPos', formData.xPos);
     FormDataSend.append('yPos', formData.yPos);
     FormDataSend.append('textFields', JSON.stringify(textFields));
-    await axios.post('http://127.0.0.1:8080/api/user/genAndUp', FormDataSend, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${token}`,
+    await axios.post(
+      `${process.env.NEXT_PUBLIC_ENDPOINT}/api/user/genAndUp`,
+      FormDataSend,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
       },
-    });
+    );
     console.log('cert created');
     console.log(JSON.parse(localStorage.getItem('list')));
     router.push('/actions/Event/CreateMail');
@@ -309,6 +298,7 @@ const PdfCreator = () => {
                                 src="/Canva_Logo.svg.png"
                                 width={150}
                                 height={100}
+                                alt="logo"
                               />
                             </span>
                           </Button>
@@ -398,8 +388,10 @@ const PdfCreator = () => {
                   </div>
                 </div>
                 {textFields.map((elm, index) => (
-                  <div className="w-full flex flex-col gap-4 mt-4">
-                    <h1 className="font-bold">{'Field ' + (index + 1)}</h1>{' '}
+                  <div className="w-full flex flex-col gap-4 mt-4" key={index}>
+                    <h1 className="font-bold">
+                      {'Static Field ' + (index + 1)}
+                    </h1>{' '}
                     <TextField className="">
                       <Label>text</Label>
                       <Input

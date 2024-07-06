@@ -21,12 +21,12 @@ import path from 'path';
 import {useRouter} from 'next/navigation';
 
 export default function UploadData() {
-  let [files, setFiles] = React.useState(null);
-  let [entries, setEntries] = React.useState([]);
+  let [files, setFiles] = React.useState<any>(null);
+  let [entries, setEntries] = React.useState<any>([]);
   let [keys, setKeys] = React.useState(["Name", "Roll", "Email"]);
   let router = useRouter();
 
-  function handleEntry(e) {
+  function handleEntry(e : any) {
     e.preventDefault();
     let data = Object.fromEntries(new FormData(e.currentTarget));
 		setEntries([...entries , data])
@@ -34,14 +34,14 @@ export default function UploadData() {
 		console.log(entries)
   }
 
-  async function uploadFile(e) {
+  async function uploadFile(e : any) {
     const token = localStorage.getItem('usrToken');
     e.preventDefault();
     const formData = new FormData();
     formData.append('csvFile', e.target[1].files[0]);
     console.log(e.target[1].files[0]);
     let resp = await axios.post(
-      `${process.env.ENDPOINT}/api/user/csvToJson`,
+      `${process.env.NEXT_PUBLIC_ENDPOINT}/api/user/csvToJson`,
       formData,
       {
         headers: {
@@ -98,13 +98,13 @@ export default function UploadData() {
                       className="flex flex-col w-full"
                     >
                       <FileTrigger
-                        onSelect={e => {
+                        onSelect={(e : any )=> {
                           let files = Array.from(e);
-                          let filenames = files.map(file => file.name);
+                          let filenames = files.map((file : any) => file.name);
                           setFiles(filenames.join(', '));
                         }}
-                        name="csvFile"
                       >
+												{/*name="csvFile"*/}
                         <Button className="bg-gray-200 border-solid border-black border-2 px-3 py-2">
                           Browse
                         </Button>
@@ -165,7 +165,7 @@ export default function UploadData() {
               </Button>
             </Form>
             <div className="overflow-scroll h-32 w-1/2">
-              {entries.map((elm, num) => (
+              {entries.map((elm : any, num : number) => (
                 <div
                   className={`grid grid-cols-3 text-center p-1 px-5 ${
                     num % 2 == 0 ? 'bg-white' : 'bg-sky-100'
@@ -180,7 +180,7 @@ export default function UploadData() {
             </div>
           </div>
           <Button
-            onClick={handleRouting}
+            onPress={handleRouting}
             className="w-2/6 py-3 bg-sky-400 text-white text-3xl font-bold rounded-full"
           >
             Choose a certificate template!
