@@ -16,11 +16,13 @@ import {useRouter} from 'next/navigation';
 export default function CreateMail() {
   const [html, setHtml] = useState('<p>Type your HTML here</p>');
   const [selection, setSelection] = useState('template1.html');
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   async function handleSubmit() {
     const token = localStorage.getItem('usrToken');
     console.log('mailing');
+    setLoading(true);
     await axios.post(
       `${process.env.NEXT_PUBLIC_ENDPOINT}/api/user/mail`,
       {
@@ -36,6 +38,7 @@ export default function CreateMail() {
       },
     );
     router.push('FinalPage');
+    setLoading(false);
   }
 
   function handleSelection(e) {
@@ -114,6 +117,14 @@ export default function CreateMail() {
             Send Mail
           </Button>
         </div>
+        {loading && (
+          <div className="absolute bg-white h-40 w-[30vw] right-0 bottom-2 border-4 border-blue-400 rounded-xl flex justify-center items-center">
+            <h1>
+              Your mails are being sent, you can close this window or wait for
+              final page
+            </h1>
+          </div>
+        )}
       </div>
     </>
   );

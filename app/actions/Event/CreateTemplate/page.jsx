@@ -37,9 +37,10 @@ const PdfCreator = () => {
     directory: 'public/certs',
   });
   const [pageProps, setPageProps] = useState({});
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState();
   const [retrievedFileURL, setRetrievedFileURL] = useState('');
   const [textFields, setTextFields] = useState([]);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   async function handleSubmit() {
@@ -53,6 +54,7 @@ const PdfCreator = () => {
     FormDataSend.append('xPos', formData.xPos);
     FormDataSend.append('yPos', formData.yPos);
     FormDataSend.append('textFields', JSON.stringify(textFields));
+    setLoading(true);
     await axios.post(
       `${process.env.NEXT_PUBLIC_ENDPOINT}/api/user/genAndUp`,
       FormDataSend,
@@ -66,6 +68,7 @@ const PdfCreator = () => {
     console.log('cert created');
     console.log(JSON.parse(localStorage.getItem('list')));
     router.push('/actions/Event/CreateMail');
+    setLoading(false);
   }
 
   function handleInputChange(e) {
@@ -490,12 +493,18 @@ const PdfCreator = () => {
                     Download Sample
                   </a>
                 </Button>
-                <Button
-                  className="w-full py-3 bg-sky-500 text-white text-xl font-bold rounded-lg transition duration-300 ease-in-out hover:bg-sky-600"
-                  onClick={handleSubmit}
-                >
-                  Choose an email template
-                </Button>
+                {(file == undefined && (
+                  <Button className="w-full py-3 bg-gray-200 text-gray-400 text-xl font-bold rounded-lg transition duration-300 ease-in-out cursor-not-allowed">
+                    Choose an email template
+                  </Button>
+                )) || (
+                  <Button
+                    className="w-full py-3 bg-sky-500 text-white text-xl font-bold rounded-lg transition duration-300 ease-in-out hover:bg-sky-600 cursor-pointer"
+                    onClick={handleSubmit}
+                  >
+                    Choose an email template
+                  </Button>
+                )}
               </div>
             </div>
           </div>
@@ -514,6 +523,12 @@ const PdfCreator = () => {
               }}
               allowFullScreen
             ></iframe>
+          </div>
+        )}
+
+        {loading && (
+          <div className="absolute bg-white h-40 w-[30vw] right-0 bottom-2 border-4 border-blue-400 rounded-xl flex justify-center items-center">
+            <h1> Loading, Please be calm</h1>
           </div>
         )}
       </div>

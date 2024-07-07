@@ -8,47 +8,60 @@ import {
   TextField,
 } from 'react-aria-components';
 import {useState} from 'react';
-import Link from 'next/link'
+import Link from 'next/link';
 import axios from 'axios';
-import { useRouter } from 'next/navigation'
+import {useRouter} from 'next/navigation';
 
 export default function Auth({}) {
-  const [auth, setAuth] = useState(false);
-	const router = useRouter();
+  const [auth, setAuth] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const router = useRouter();
 
-  function handleAuth(e : any) {
-    e.target.attributes['data-value'].value === 'true' ? setAuth(false) : setAuth(true);
+  function handleAuth(e: any) {
+    e.target.attributes['data-value'].value === 'true'
+      ? setAuth(false)
+      : setAuth(true);
   }
 
-  async function handleLogin(e : any) {
+  async function handleLogin(e: any) {
     e.preventDefault();
     const username = e.target[0].attributes.value.value;
     const password = e.target[1].attributes.value.value;
-    let data = await axios.post(`${process.env.NEXT_PUBLIC_ENDPOINT}/api/user/login`, {
-      name: username,
-      password: password,
-    });
-		console.log(password)
-		console.log(data)
-		if(data.data.login == true) {
-			localStorage.setItem("usrToken",data.data.usrToken)
-			router.push(`/actions/CreateEvent`)
-		}
+    setLoading(true);
+    let data = await axios.post(
+      `${process.env.NEXT_PUBLIC_ENDPOINT}/api/user/login`,
+      {
+        name: username,
+        password: password,
+      },
+    );
+    setLoading(false);
+    console.log(password);
+    console.log(data);
+    if (data.data.login == true) {
+      localStorage.setItem('usrToken', data.data.usrToken);
+      router.push(`/actions/CreateEvent`);
+    }
   }
 
-  async function handleSignUp(e : any) {
+  async function handleSignUp(e: any) {
     e.preventDefault();
     const username = e.target[0].attributes.value.value;
     const email = e.target[1].attributes.value.value;
     const password = e.target[2].attributes.value.value;
-    let data = await axios.post(`${process.env.NEXT_PUBLIC_ENDPOINT}/api/user/signup`, {
-      name: username,
-      password: password,
-    });
-		console.log(data.data.signup)
-		if(data.data.signup == true) {
-			setAuth(false)
-		}
+    setLoading(true);
+    let data = await axios.post(
+      `${process.env.NEXT_PUBLIC_ENDPOINT}/api/user/signup`,
+      {
+        name: username,
+        password: password,
+      },
+    );
+    setLoading(false);
+    console.log(data.data.signup);
+    if (data.data.signup == true) {
+      setAuth(false);
+    }
   }
 
   return (
@@ -56,7 +69,9 @@ export default function Auth({}) {
       <div className="flex flex-row justify-between px-20">
         <h1
           className={
-            auth ? `text-2xl text-gray-400 cursor-pointer` : `text-2xl text-[#09B5FF] cursor-pointer`
+            auth
+              ? `text-2xl text-gray-400 cursor-pointer`
+              : `text-2xl text-[#09B5FF] cursor-pointer`
           }
           data-value={true}
           onClick={handleAuth}
@@ -66,7 +81,9 @@ export default function Auth({}) {
         <h1 className="text-2xl text-gray-400">|</h1>
         <h1
           className={
-            auth ? `text-2xl text-[#09B5FF] cursor-pointer` : `text-2xl text-gray-400 cursor-pointer`
+            auth
+              ? `text-2xl text-[#09B5FF] cursor-pointer`
+              : `text-2xl text-gray-400 cursor-pointer`
           }
           data-value={false}
           onClick={handleAuth}
@@ -100,9 +117,13 @@ export default function Auth({}) {
             </TextField>
             <Button
               type="submit"
-              className="w-full text-center text-white py-3 bg-sky-500"
+              className={`w-full flex justify-center text-white py-3 ${
+                loading ? 'bg-gray-200' : 'bg-sky-500'
+              }`}
             >
-              Submit
+              {(loading && <div className="spinner w-8 h-8" />) || (
+                <h1>Login !</h1>
+              )}
             </Button>
           </Form>
         )}
@@ -141,9 +162,13 @@ export default function Auth({}) {
             </TextField>
             <Button
               type="submit"
-              className="w-full text-center text-white py-3 bg-sky-500"
+              className={`w-full flex justify-center text-white py-3 ${
+                loading ? 'bg-gray-200' : 'bg-sky-500'
+              }`}
             >
-              Submit
+              {(loading && <div className="spinner w-8 h-8" />) || (
+                <h1>Sign Up !</h1>
+              )}
             </Button>
           </Form>
         )}

@@ -2,11 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-
 .react-aria-ProgressBar {
   display: grid;
-  grid-template-areas: "label value"
-                       "bar bar";
+  grid-template-areas:
+    'label value'
+    'bar bar';
   grid-template-columns: 1fr auto;
   width: 100%;
   color: black;
@@ -23,5 +23,17 @@
     overflow: hidden;
     will-change: transform;
   }
+}
 
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #4a5568;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }

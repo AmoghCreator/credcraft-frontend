@@ -21,25 +21,27 @@ import path from 'path';
 import {useRouter} from 'next/navigation';
 
 export default function UploadData() {
-  let [files, setFiles] = React.useState<any>(null);
-  let [entries, setEntries] = React.useState<any>([]);
-  let [keys, setKeys] = React.useState(["Name", "Roll", "Email"]);
+  const [files, setFiles] = React.useState<any>(null);
+  const [entries, setEntries] = React.useState<any>([]);
+  const [keys, setKeys] = React.useState(['Name', 'Roll', 'Email']);
+  const [loading, setLoading] = React.useState<boolean>(false);
   let router = useRouter();
 
-  function handleEntry(e : any) {
+  function handleEntry(e: any) {
     e.preventDefault();
     let data = Object.fromEntries(new FormData(e.currentTarget));
-		setEntries([...entries , data])
-    localStorage.setItem('list', JSON.stringify([...entries , data]));
-		console.log(entries)
+    setEntries([...entries, data]);
+    localStorage.setItem('list', JSON.stringify([...entries, data]));
+    console.log(entries);
   }
 
-  async function uploadFile(e : any) {
+  async function uploadFile(e: any) {
     const token = localStorage.getItem('usrToken');
     e.preventDefault();
     const formData = new FormData();
     formData.append('csvFile', e.target[1].files[0]);
     console.log(e.target[1].files[0]);
+    setLoading(true);
     let resp = await axios.post(
       `${process.env.NEXT_PUBLIC_ENDPOINT}/api/user/csvToJson`,
       formData,
@@ -53,6 +55,7 @@ export default function UploadData() {
     setKeys(Object.keys(resp.data.data[0]));
     setEntries([...entries, ...resp.data.data]);
     localStorage.setItem('list', JSON.stringify(resp.data.data));
+    setLoading(false);
     console.log(Object.keys(resp.data.data[0]));
     console.log(localStorage.getItem('list'));
   }
@@ -69,8 +72,14 @@ export default function UploadData() {
           <h1 className="text-3xl font-bold">Provide the recipients data</h1>
           <DialogTrigger>
             {!files ? (
-              <Button className="w-2/6 py-3 bg-sky-400 text-white text-3xl font-bold rounded-full">
-                Click to Upload CSV
+              <Button
+                className={`w-2/6 ${
+                  loading ? 'bg-gray-200' : 'bg-sky-400'
+                } py-3 flex justify-center text-white text-3xl font-bold rounded-full`}
+              >
+                {(loading && <div className="spinner w-8 h-8" />) || (
+                  <h1>Click to Upload CSV</h1>
+                )}
               </Button>
             ) : (
               <Button className="w-2/6 py-3 bg-sky-400 text-white text-3xl font-bold rounded-full">
@@ -98,13 +107,13 @@ export default function UploadData() {
                       className="flex flex-col w-full"
                     >
                       <FileTrigger
-                        onSelect={(e : any )=> {
+                        onSelect={(e: any) => {
                           let files = Array.from(e);
-                          let filenames = files.map((file : any) => file.name);
+                          let filenames = files.map((file: any) => file.name);
                           setFiles(filenames.join(', '));
                         }}
                       >
-												{/*name="csvFile"*/}
+                        {/*name="csvFile"*/}
                         <Button className="bg-gray-200 border-solid border-black border-2 px-3 py-2">
                           Browse
                         </Button>
@@ -165,7 +174,7 @@ export default function UploadData() {
               </Button>
             </Form>
             <div className="overflow-scroll h-32 w-1/2">
-              {entries.map((elm : any, num : number) => (
+              {entries.map((elm: any, num: number) => (
                 <div
                   className={`grid grid-cols-3 text-center p-1 px-5 ${
                     num % 2 == 0 ? 'bg-white' : 'bg-sky-100'
@@ -181,9 +190,13 @@ export default function UploadData() {
           </div>
           <Button
             onPress={handleRouting}
-            className="w-2/6 py-3 bg-sky-400 text-white text-3xl font-bold rounded-full"
+            className={`w-2/6 py-3 ${
+              entries.length == 0 ? 'bg-gray-200 cursor-not-allowed' : 'bg-sky-400 cursor-pointer'
+            } text-white text-3xl font-bold rounded-full flex justify-center`}
           >
-            Choose a certificate template!
+            {(entries.length == 0 && <h1>Please upload recipients data</h1>) || (
+              <h1>Choose a certificate template!</h1>
+            )}
           </Button>
         </div>
       </div>
