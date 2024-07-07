@@ -52,7 +52,7 @@ export default function CreateMail() {
 
   return (
     <>
-      <Numberline className="w-2/5" data-value={100} />
+      <Numberline className="w-2/5" value={100} />
       <h1 className="text-3xl font-bold mt-4">Choose a mailing template</h1>
       <div className="w-full h-[60vh] flex flex-row items-center justify-center gap-8 px-9 mt-8">
         <div className="w-1/3 h-full flex flex-col gap-2 border-2 border-black rounded-xl p-9">
@@ -117,7 +117,7 @@ export default function CreateMail() {
             Send Mail
           </Button>
         </div>
-        {loading && (
+        {!loading && (
           <div className="absolute bg-white h-40 w-[30vw] right-0 bottom-2 border-4 border-blue-400 rounded-xl flex justify-center items-center">
             <h1>
               Your mails are being sent, you can close this window or wait for
