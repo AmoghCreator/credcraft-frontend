@@ -117,7 +117,7 @@ export default function CreateMail() {
             Send Mail
           </Button>
         </div>
-        {!loading && (
+        {loading && (
           <div className="absolute bg-white h-40 w-[30vw] right-0 bottom-2 border-4 border-blue-400 rounded-xl flex justify-center items-center">
             <h1>
               Your mails are being sent, you can close this window or wait for

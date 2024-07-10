@@ -23,15 +23,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} w-screen h-screen flex flex-col`}>
-        <div className="w-full flex flex-row justify-between items-center py-4 px-10 bg-white shadow-md">
-          <h1 className="text-sky-500 text-4xl font-bold">CredCraft</h1>
+        <div className="w-full flex flex-row justify-between items-center py-4 px-4 md:px-[6vw] bg-white shadow-md">
+          <h1 className="text-sky-500 text-xl md:text-4xl font-bold">CredCraft</h1>
           <Link href="/auth">
-            <h2 className="text-2xl text-sky-500 border-2 border-sky-500 rounded-full px-6 py-2 hover:bg-sky-500 hover:text-white transition-colors duration-300">
+            <h2 className="text-xl md:text-2xl text-sky-500 border-2 border-sky-500 rounded-full px-6 py-2 hover:bg-sky-500 hover:text-white transition-colors duration-300">
               Login / SignUp
             </h2>
           </Link>
         </div>
-        <div className="flex flex-col items-center gap-4 justify-center bg-gray-100 flex-grow">
+        <div className="flex flex-col items-center gap-4 justify-center bg-gray-100 flex-grow md:px-[6vw]">
           {children}
         </div>
       </body>
