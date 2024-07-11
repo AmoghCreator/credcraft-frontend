@@ -4,7 +4,7 @@ import Link from 'next/link';
 export default function Home() {
   return (
     <div className="w-full h-full">
-      <div className="w-full h-[64vh] py-4 md:h-[58vh] md:flex md:justify-center bg-white">
+      <div className="w-full h-[70vh] py-4 md:h-[58vh] md:flex md:justify-center bg-white">
         <Image
           src="/certImage.png"
           alt="certificate example"
