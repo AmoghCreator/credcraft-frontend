@@ -22,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} w-screen h-screen flex flex-col`}>
+      <body className={`${inter.className} w-full h-full flex flex-col`}>
         <div className="w-full flex flex-row justify-between items-center py-4 px-4 md:px-[6vw] bg-white shadow-md">
           <h1 className="text-sky-500 text-xl md:text-4xl font-bold">CredCraft</h1>
           <Link href="/auth">
@@ -31,7 +31,7 @@ export default function RootLayout({
             </h2>
           </Link>
         </div>
-        <div className="flex flex-col items-center gap-4 justify-center bg-gray-100 flex-grow md:px-[6vw]">
+        <div className="h-full w-full flex flex-col items-center gap-4 justify-center bg-gray-100 flex-grow md:px-[6vw]">
           {children}
         </div>
       </body>
