@@ -65,8 +65,8 @@ export default function Auth({}) {
   }
 
   return (
-    <div className="w-2/5 mt-10">
-      <div className="flex flex-row justify-between px-20">
+    <div className="md:w-2/5 w-full mt-10 px-10 md:px-0">
+      <div className="flex flex-row justify-between md:px-20 w-full">
         <h1
           className={
             auth

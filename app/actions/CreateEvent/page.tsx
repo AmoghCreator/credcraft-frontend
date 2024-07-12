@@ -2,7 +2,7 @@
 import {TextField, Input, Form, Button} from 'react-aria-components';
 import axios from 'axios';
 import {useState, useEffect} from 'react';
-import {useRouter} from 'next/navigation';
+import {useRouter, redirect} from 'next/navigation';
 
 interface dirListInterface {
   directoryName: string;
@@ -45,6 +45,11 @@ export default function CreateEvent() {
         },
       },
     );
+    console.log(data);
+    if (data.data.error != undefined) {
+      router.push('/actions/Error/QuotaExceeded');
+      return;
+    }
     localStorage.setItem('directoryName', dirName);
     router.push('/actions/Event/UploadData');
     setLoading(false);
@@ -63,14 +68,14 @@ export default function CreateEvent() {
   return (
     <>
       {/*<div style={{paddingTop:"4vh"}}>*/}
-      <h1 className="text-4xl " onClick={handleDirGet}>
-        What is the name of your event / group ?
+      <h1 className="text-2xl md:text-4xl px-10 text-center md:text-left" onClick={handleDirGet}>
+        What are we calling your Big Event ?
       </h1>
-      <Form onSubmit={handleDirCreate} className="w-2/5">
+      <Form onSubmit={handleDirCreate} className="md:w-3/5 px-10">
         <TextField isRequired autoFocus>
           <Input
             name="directoryName"
-            className="border-b-4 border-sky-400 text-5xl w-full font-semibold text-center mb-2 cursor-text focus:outline-none"
+            className="border-b-2 md:border-b-4 border-sky-400 text-2xl md:text-5xl w-full font-semibold text-center mb-2 cursor-text focus:outline-none"
           />
         </TextField>
         <Button
@@ -86,7 +91,7 @@ export default function CreateEvent() {
         <h1>Name</h1>
         <h1>Created At</h1>
       </div>
-      <div className="overflow-scroll w-2/5">
+      <div className="overflow-scroll w-2/5 h-1/2">
         {dirList?.map((elm: any, num: any) => (
           <div
             className={

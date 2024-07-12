@@ -22,16 +22,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} w-full h-full flex flex-col`}>
-        <div className="w-full flex flex-row justify-between items-center py-4 px-4 md:px-[6vw] bg-white shadow-md">
+      <body className={`${inter.className} w-screen h-screen flex flex-col md:items-center`}>
+        <div className="w-full md:mt-4 flex flex-row justify-between items-center py-4 px-4 md:px-[6vw] bg-white shadow-md shadow-black/5 z-20 md:rounded-r-full md:rounded-l-full">
           <h1 className="text-sky-500 text-xl md:text-4xl font-bold">CredCraft</h1>
           <Link href="/auth">
-            <h2 className="text-xl md:text-2xl text-sky-500 border-2 border-sky-500 rounded-full px-6 py-2 hover:bg-sky-500 hover:text-white transition-colors duration-300">
+            <h2 className="text-lg md:text-xl text-sky-500 border-2 border-sky-500 rounded-full px-3 md:px-6 md:py-2 hover:bg-sky-500 hover:text-white transition-colors duration-300">
               Login / SignUp
             </h2>
           </Link>
         </div>
-        <div className="h-full w-full flex flex-col items-center gap-4 justify-center bg-gray-100 flex-grow md:px-[6vw]">
+        <div className="h-full w-full flex flex-col items-center gap-4 justify-center bg-white flex-grow md:px-[6vw]">
           {children}
         </div>
       </body>

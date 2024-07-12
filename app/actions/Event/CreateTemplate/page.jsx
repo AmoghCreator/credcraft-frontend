@@ -30,7 +30,7 @@ import Image from 'next/image';
 const PdfCreator = () => {
   const [pdfUrl, setPdfUrl] = useState(null);
   const [formData, setFormData] = useState({
-    Name: 'default',
+    Name: 'User Name',
     xPos: 0,
     yPos: 0,
     Roll: '',
@@ -49,13 +49,13 @@ const PdfCreator = () => {
     FormDataSend.append('templateFile', file);
     FormDataSend.set('directoryName', localStorage.getItem('directoryName'));
     FormDataSend.append('certTemplate', file.name.split('.pdf')[0]);
-    FormDataSend.append('font', 'Pacifico-Regular.ttf');
+    FormDataSend.append('font', 'Poppins-Medium.ttf');
     FormDataSend.append('list', localStorage.getItem('list'));
     FormDataSend.append('xPos', formData.xPos);
     FormDataSend.append('yPos', formData.yPos);
     FormDataSend.append('textFields', JSON.stringify(textFields));
     setLoading(true);
-    await axios.post(
+    let data = await axios.post(
       `${process.env.NEXT_PUBLIC_ENDPOINT}/api/user/genAndUp`,
       FormDataSend,
       {
@@ -65,10 +65,15 @@ const PdfCreator = () => {
         },
       },
     );
-    console.log('cert created');
-    console.log(JSON.parse(localStorage.getItem('list')));
-    router.push('/actions/Event/CreateMail');
-    setLoading(false);
+    if (data.data.error != undefined) {
+      router.push('/actions/Error/QuotaExceeded');
+      return;
+    } else {
+      console.log('cert created');
+      console.log(JSON.parse(localStorage.getItem('list')));
+      router.push('/actions/Event/CreateMail');
+      setLoading(false);
+    }
   }
 
   function handleInputChange(e) {
@@ -266,11 +271,11 @@ const PdfCreator = () => {
 
   return (
     <>
-      <div className="w-full h-[89vh] flex flex-row items-center justify-center gap-8 p-8 bg-gray-100">
+      <div className="w-full h-[85vh] flex flex-row items-center justify-center gap-8 p-8 bg-white">
         <div className="w-1/4 bg-white shadow-lg rounded-lg px-6 py-8 flex flex-col items-center gap-6 h-full overflow-scroll">
           <Numberline className="w-full" value={50} />
           <div className="flex flex-col items-center justify-center">
-            <h1 className="text-2xl py-4 font-bold">
+            <h1 className="text-xl py-4 font-bold">
               Choose a certificate template
             </h1>
             <div className="w-full h-full flex flex-col justify-center items-center gap-6">
@@ -411,29 +416,6 @@ const PdfCreator = () => {
                         />
                         <Label>px</Label>
                       </TextField>{' '}
-                      <Select
-                        onSelectionChange={e => handleFontSelection(index, e)}
-                      >
-                        <Label>Favorite Animal</Label>
-                        <Button>
-                          <SelectValue />
-                          <span aria-hidden="true">▼</span>
-                        </Button>
-                        <Popover>
-                          <ListBox>
-                            <ListBoxItem id="Pacifico-Regular.ttf">
-                              Pacifico
-                            </ListBoxItem>
-                            <ListBoxItem
-                              id="
-                              DancingScript-VariableFont_wght.ttf
-"
-                            >
-                              DancingScript
-                            </ListBoxItem>
-                          </ListBox>
-                        </Popover>
-                      </Select>
                     </div>
                     <div className="flex items-center">
                       <h1 className="w-1/6">X Axis</h1>

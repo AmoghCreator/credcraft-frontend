@@ -29,7 +29,7 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div className="w-full h-1/4 flex gap-4 items-center justify-center bg-sky-500 md:px-10 py-10">
+      <div className="w-full h-fit flex gap-4 items-center justify-center bg-sky-500 md:px-10 py-10">
         <div className="text-black md:w-1/2 bg-white md:py-5 py-3 rounded-xl border-black border-2 mx-6">
           <div>
             <h1 className="underline font-bold text-3xl md:text-4xl text-center text-sky-400">
@@ -52,7 +52,7 @@ export default function Home() {
           className="hidden md:block shadow-black/35 shadow-xl hover:scale-105 transition-all ease-in-out duration-500 rounded-lg"
         />
       </div>
-      <div className="w-full h-1/4 flex gap-4 items-center justify-center bg-white md:px-10 py-10">
+      <div className="w-full h-fit flex gap-4 items-center justify-center bg-white md:px-10 py-10">
         <Image
           src="/step2.png"
           alt="certificate example"
@@ -70,7 +70,7 @@ export default function Home() {
           </p>
         </div>
       </div>
-      <div className="w-full h-1/4 flex gap-4 items-center justify-center bg-sky-500 md:px-10 py-10">
+      <div className="w-full h-fit flex gap-4 items-center justify-center bg-sky-500 md:px-10 py-10">
         <div className="text-black md:w-1/2 bg-white md:py-6 py-3 rounded-xl border-black border-2 mx-6">
           <h1 className="underline font-bold text-3xl md:text-4xl text-sky-500 text-center">
             Step 3

@@ -30,7 +30,14 @@ export default function UploadData() {
   function handleEntry(e: any) {
     e.preventDefault();
     let data = Object.fromEntries(new FormData(e.currentTarget));
+		data['Roll'] = Math.round(Math.random()*1000000);
     setEntries([...entries, data]);
+		/*
+		entries.map( (elm) => {
+			elm['Roll'] = Math.round(Math.random()*1000000);
+			console.log(elm)
+		})
+		*/
     localStorage.setItem('list', JSON.stringify([...entries, data]));
     console.log(entries);
   }
@@ -52,6 +59,10 @@ export default function UploadData() {
         },
       },
     );
+		resp.data.data.map( (elm : any) => {
+			elm['Roll'] = Math.round(Math.random()*1000000);
+			console.log(elm)
+		})
     setKeys(Object.keys(resp.data.data[0]));
     setEntries([...entries, ...resp.data.data]);
     localStorage.setItem('list', JSON.stringify(resp.data.data));
@@ -66,23 +77,25 @@ export default function UploadData() {
 
   return (
     <>
-      <div className="flex flex-col items-center justify-center gap-8 bg-gray-100 h-[80vh] w-screen">
-        <div className="w-full flex flex-col items-center gap-6">
+      <div className="bg-white h-full w-full">
+        <div className="flex flex-col items-center w-full h-full mt-10">
           <Numberline value={0} className="w-2/5" />
-          <h1 className="text-3xl font-bold">Provide the recipients data</h1>
+          <h1 className="text-2xl font-semibold mt-8 mb-2">
+            Provide the recipients data
+          </h1>
           <DialogTrigger>
             {!files ? (
               <Button
                 className={`w-2/6 ${
                   loading ? 'bg-gray-200' : 'bg-sky-400'
-                } py-3 flex justify-center text-white text-3xl font-bold rounded-full`}
+                } py-3 flex justify-center text-white text-xl font-bold rounded-full`}
               >
                 {(loading && <div className="spinner w-8 h-8" />) || (
                   <h1>Click to Upload CSV</h1>
                 )}
               </Button>
             ) : (
-              <Button className="w-2/6 py-3 bg-sky-400 text-white text-3xl font-bold rounded-full">
+              <Button className="w-2/6 py-3 bg-sky-400 text-white text-lg font-bold rounded-full">
                 {files} selected
               </Button>
             )}
@@ -139,31 +152,32 @@ export default function UploadData() {
               </Dialog>
             </Modal>
           </DialogTrigger>
-          <div className="flex flex-row items-center gap-4">
+          <div className="flex flex-row items-center gap-4 mt-2">
             <div className="h-px w-64 bg-black"></div>
-            <h1 className="text-xl font-bold">or</h1>
+            <h1 className="text-lg text-black/70">or</h1>
             <div className="h-px w-64 bg-black"></div>
           </div>
-          <h1 className="text-2xl font-bold">Enter Manually</h1>
+          <h1 className="text-xl font-semibold">Enter Manually</h1>
 
           <div className="w-full flex flex-col items-center">
-            <div className="grid grid-cols-3 text-center px-5 font-bold w-1/2">
+            <div className="grid grid-cols-2 text-center px-5 text-md w-1/2">
               <h1>Name</h1>
-              <h1>UID</h1>
               <h1>Email</h1>
             </div>
             <Form
-              className="grid grid-cols-3 text-center py-2 font-bold w-1/2"
+              className="grid grid-cols-2 text-center py-2 font-semibold w-1/2"
               onSubmit={handleEntry}
             >
               <TextField name="Name">
-                <Input className="w-4/5" />
+                <Input className="w-4/5 text-center border-2 border-b-sky-400" />
               </TextField>
+              {/*
               <TextField name="Roll">
-                <Input className="w-4/5" />
+                <Input className="w-4/5 text-center" />
               </TextField>
+							*/}
               <TextField name="Email">
-                <Input className="w-4/5" />
+                <Input className="w-4/5 text-center border-2 border-b-sky-400" />
               </TextField>
               <Button
                 type="submit"
@@ -173,17 +187,17 @@ export default function UploadData() {
                 +{' '}
               </Button>
             </Form>
-            <div className="overflow-scroll h-32 w-1/2">
+            <div className="overflow-scroll h-32 w-1/2 mb-2">
               {entries.map((elm: any, num: number) => (
                 <div
-                  className={`grid grid-cols-3 text-center p-1 px-5 ${
+                  className={`grid grid-cols-2 text-center p-1 px-5 ${
                     num % 2 == 0 ? 'bg-white' : 'bg-sky-100'
                   }`}
                   key={num}
                 >
                   <h1>{elm[keys[0]]}</h1>
-                  <h1>{elm[keys[1]]}</h1>
                   <h1>{elm[keys[2]]}</h1>
+									{/*<h1>{elm[keys[2]]}</h1>*/}
                 </div>
               ))}
             </div>
@@ -191,12 +205,14 @@ export default function UploadData() {
           <Button
             onPress={handleRouting}
             className={`w-2/6 py-3 ${
-              entries.length == 0 ? 'bg-gray-200 cursor-not-allowed' : 'bg-sky-400 cursor-pointer'
-            } text-white text-3xl font-bold rounded-full flex justify-center`}
+              entries.length == 0
+                ? 'bg-gray-200 cursor-not-allowed'
+                : 'bg-sky-400 cursor-pointer'
+            } text-white text-xl font-bold rounded-full flex justify-center`}
           >
-            {(entries.length == 0 && <h1>Please upload recipients data</h1>) || (
-              <h1>Choose a certificate template!</h1>
-            )}
+            {(entries.length == 0 && (
+              <h1>Please upload recipients data</h1>
+            )) || <h1>Choose a certificate template!</h1>}
           </Button>
         </div>
       </div>
