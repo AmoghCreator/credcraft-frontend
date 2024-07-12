@@ -26,7 +26,7 @@ export default function CreateEvent() {
         setDir(data.data);
       });
 
-    console.log(token);
+    //console.log(token);
   }, []);
 
   async function handleDirCreate(e: any) {
@@ -45,7 +45,7 @@ export default function CreateEvent() {
         },
       },
     );
-    console.log(data);
+    //console.log(data);
     if (data.data.error != undefined) {
       router.push('/actions/Error/QuotaExceeded');
       return;
@@ -63,7 +63,6 @@ export default function CreateEvent() {
           Authorization: `Bearer ${token}`,
         },
       })
-      .then(data => console.log(data.data));
   }
   return (
     <>

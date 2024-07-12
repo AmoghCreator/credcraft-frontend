@@ -36,8 +36,8 @@ export default function Auth({}) {
       },
     );
     setLoading(false);
-    console.log(password);
-    console.log(data);
+    //console.log(password);
+    //console.log(data);
     if (data.data.login == true) {
       localStorage.setItem('usrToken', data.data.usrToken);
       router.push(`/actions/CreateEvent`);
@@ -58,7 +58,7 @@ export default function Auth({}) {
       },
     );
     setLoading(false);
-    console.log(data.data.signup);
+    //console.log(data.data.signup);
     if (data.data.signup == true) {
       setAuth(false);
     }

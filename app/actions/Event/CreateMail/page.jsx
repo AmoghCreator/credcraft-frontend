@@ -29,7 +29,7 @@ export default function CreateMail() {
 
   async function handleSubmit() {
     const token = localStorage.getItem('usrToken');
-    console.log('mailing');
+    //console.log('mailing');
     setLoading(true);
 
     let data = await axios.post(
@@ -111,17 +111,17 @@ Here is the description, follow the description as artistically as possible, the
           ],
           model: 'gpt-3.5-turbo-1106',
         });
-        console.log(completion.choices[0].message.content);
+        //console.log(completion.choices[0].message.content);
         setHtml(completion.choices[0].message.content);
       } catch (error) {
-        console.error('Error generating HTML:', error);
+        //console.error('Error generating HTML:', error);
       }
     }
   }
 
   function handleSelection(e) {
     const selectedValue = e.target.attributes['data-value'].value;
-    console.log(selectedValue);
+    //console.log(selectedValue);
     setSelection(selectedValue);
 
     if (selectedValue === 'custom') {

@@ -69,8 +69,8 @@ const PdfCreator = () => {
       router.push('/actions/Error/QuotaExceeded');
       return;
     } else {
-      console.log('cert created');
-      console.log(JSON.parse(localStorage.getItem('list')));
+      //console.log('cert created');
+      //console.log(JSON.parse(localStorage.getItem('list')));
       router.push('/actions/Event/CreateMail');
       setLoading(false);
     }
@@ -111,8 +111,8 @@ const PdfCreator = () => {
         // Update the array with the modified field
         updatedTextFields[index] = updatedField;
 
-        console.log(index);
-        console.log(updatedTextFields);
+        //console.log(index);
+        //console.log(updatedTextFields);
 
         // Return the updated array to set the state
         return updatedTextFields;
@@ -136,8 +136,8 @@ const PdfCreator = () => {
         // Update the array with the modified field
         updatedTextFields[index] = updatedField;
 
-        console.log(index);
-        console.log(updatedTextFields);
+        //console.log(index);
+        //console.log(updatedTextFields);
 
         // Return the updated array to set the state
         return updatedTextFields;
@@ -181,7 +181,7 @@ const PdfCreator = () => {
       updatedTextField[index] = updatedField;
       return updatedTextField;
     });
-    console.log(e);
+    //console.log(e);
   }
 
   function addTextField() {
@@ -197,7 +197,7 @@ const PdfCreator = () => {
 
   const createPdf = async base64String => {
     if (!base64String) {
-      console.log('No PDF uploaded');
+      //console.log('No PDF uploaded');
       return;
     }
 
@@ -220,7 +220,7 @@ const PdfCreator = () => {
     const fontSize = 24;
     const {Name, xPos, yPos} = formData;
 
-    console.log({xPos, yPos});
+    //console.log({xPos, yPos});
 
     firstPage.drawText(String(Name), {
       x: width / 2 - (Name.length * fontSize) / 3.5 - xPos,
@@ -262,7 +262,7 @@ const PdfCreator = () => {
     reader.onloadend = async () => {
       const base64String = reader.result.split(',')[1];
       await localStorage.setItem('uploadedPdf', base64String);
-      console.log('PDF saved successfully');
+      //console.log('PDF saved successfully');
       createPdf(base64String); // Ensure PDF is created after file is saved
     };
     reader.readAsDataURL(file);

@@ -35,11 +35,11 @@ export default function UploadData() {
 		/*
 		entries.map( (elm) => {
 			elm['Roll'] = Math.round(Math.random()*1000000);
-			console.log(elm)
+			//console.log(elm)
 		})
 		*/
     localStorage.setItem('list', JSON.stringify([...entries, data]));
-    console.log(entries);
+    ////console.log(entries);
   }
 
   async function uploadFile(e: any) {
@@ -47,7 +47,7 @@ export default function UploadData() {
     e.preventDefault();
     const formData = new FormData();
     formData.append('csvFile', e.target[1].files[0]);
-    console.log(e.target[1].files[0]);
+    //console.log(e.target[1].files[0]);
     setLoading(true);
     let resp = await axios.post(
       `${process.env.NEXT_PUBLIC_ENDPOINT}/api/user/csvToJson`,
@@ -61,14 +61,14 @@ export default function UploadData() {
     );
 		resp.data.data.map( (elm : any) => {
 			elm['Roll'] = Math.round(Math.random()*1000000);
-			console.log(elm)
+			//console.log(elm)
 		})
     setKeys(Object.keys(resp.data.data[0]));
     setEntries([...entries, ...resp.data.data]);
     localStorage.setItem('list', JSON.stringify(resp.data.data));
     setLoading(false);
-    console.log(Object.keys(resp.data.data[0]));
-    console.log(localStorage.getItem('list'));
+    //console.log(Object.keys(resp.data.data[0]));
+    //console.log(localStorage.getItem('list'));
   }
 
   function handleRouting() {
