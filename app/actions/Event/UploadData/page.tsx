@@ -29,7 +29,7 @@ export default function UploadData() {
 
   function handleEntry(e: any) {
     e.preventDefault();
-    let data = Object.fromEntries(new FormData(e.currentTarget));
+    let data : any = Object.fromEntries(new FormData(e.currentTarget));
 		data['Roll'] = Math.round(Math.random()*1000000);
     setEntries([...entries, data]);
 		/*
