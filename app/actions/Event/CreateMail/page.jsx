@@ -59,6 +59,7 @@ export default function CreateMail() {
   async function onPrompt() {
     if (isCustomTemplate) {
       try {
+				setLoading(true)
         const completion = await openai.chat.completions.create({
           messages: [
             {
@@ -105,12 +106,14 @@ export default function CreateMail() {
 
 </html>
 
-Here is the description, follow the description as artistically as possible, there needs to be a download link, as all the mails are for certificate distribution : ${prompt}
+follow the description as artistically as possible, there needs to be a download link, as all the mails are for certificate distribution, IMPORTANT : do not include \`\`\`html tags. Here is the description, : ${prompt}
 `,
             },
           ],
-          model: 'gpt-3.5-turbo-1106',
+          model: 'gpt-3.5-turbo-0125',
+          temperature: 0.5,
         });
+				setLoading(false);
         //console.log(completion.choices[0].message.content);
         setHtml(completion.choices[0].message.content);
       } catch (error) {
@@ -138,7 +141,9 @@ Here is the description, follow the description as artistically as possible, the
   return (
     <div className="w-full h-fit flex flex-col items-center gap-5 pb-10">
       <Numberline className="w-2/5 mt-10" value={100} />
-      <h1 className="text-2xl font-bold mt-4">Make an Email template with AI !</h1>
+      <h1 className="text-2xl font-bold mt-4">
+        Make an Email template with AI !
+      </h1>
       <div className="w-full h-[60vh] flex flex-row items-center justify-center gap-8 px-9">
         {!isCustomTemplate && (
           <div className="w-1/3 h-full flex flex-col gap-2 border-2 border-black rounded-xl p-9 overflow-scroll">
@@ -205,10 +210,14 @@ Here is the description, follow the description as artistically as possible, the
                 placeholder="Type your prompt here"
               />
               <Button
-                className="bg-sky-400 rounded-xl px-4 text-white text-xl"
+                className={`bg-sky-400 rounded-xl px-4 text-white text-xl ${
+                  loading ? 'bg-gray-200' : 'bg-sky-500'
+                }`}
                 onClick={onPrompt}
               >
-                Prompt
+                {(loading && <div className="spinner w-8 h-8" />) || (
+                  <h1>Prompt</h1>
+                )}
               </Button>
             </div>
           )}
