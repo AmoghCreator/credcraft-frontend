@@ -23,7 +23,11 @@ export default function CreateEvent() {
         },
       })
       .then(data => {
-        setDir(data.data);
+        if (data.data === 'User not verified') {
+          router.push('/actions/Error/UserNotVerified');
+        } else {
+          setDir(data.data);
+        }
       });
 
     //console.log(token);
@@ -57,17 +61,22 @@ export default function CreateEvent() {
 
   async function handleDirGet() {
     let token = localStorage.getItem('usrToken');
-    let data = await axios
-      .get(`${process.env.NEXT_PUBLIC_ENDPOINT}/api/user/get_dir`, {
+    let data = await axios.get(
+      `${process.env.NEXT_PUBLIC_ENDPOINT}/api/user/get_dir`,
+      {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      })
+      },
+    );
   }
   return (
     <>
       {/*<div style={{paddingTop:"4vh"}}>*/}
-      <h1 className="text-2xl md:text-4xl px-10 text-center md:text-left" onClick={handleDirGet}>
+      <h1
+        className="text-2xl md:text-4xl px-10 text-center md:text-left"
+        onClick={handleDirGet}
+      >
         What are we calling your Big Event ?
       </h1>
       <Form onSubmit={handleDirCreate} className="md:w-3/5 px-10">

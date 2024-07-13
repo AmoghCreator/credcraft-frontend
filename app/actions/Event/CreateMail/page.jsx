@@ -9,6 +9,8 @@ import {
   Popover,
   Select,
   SelectValue,
+	Input, 
+	TextField
 } from 'react-aria-components';
 import axios from 'axios';
 import {useRouter} from 'next/navigation';
@@ -18,7 +20,9 @@ export default function CreateMail() {
   const [html, setHtml] = useState('<p>Type your HTML here</p>');
   const [selection, setSelection] = useState('template1.html');
   const [loading, setLoading] = useState(false);
+	const [prompting, setPrompting] = useState(false)
   const [isCustomTemplate, setIsCustomTemplate] = useState(true);
+	const [subject, setSubject] = useState("Hey ! Your Certificate is here !")
   const [prompt, setPrompt] = useState('');
   const router = useRouter();
 
@@ -36,7 +40,7 @@ export default function CreateMail() {
       `${process.env.NEXT_PUBLIC_ENDPOINT}/api/user/mail`,
       {
         list: localStorage.getItem('list'),
-        subject: 'a special certificate of awesomeness for buildspace',
+        subject: subject,
         mailTemplate: html,
         directoryName: localStorage.getItem('directoryName'),
       },
@@ -59,7 +63,7 @@ export default function CreateMail() {
   async function onPrompt() {
     if (isCustomTemplate) {
       try {
-				setLoading(true)
+        setPrompting(true);
         const completion = await openai.chat.completions.create({
           messages: [
             {
@@ -113,7 +117,7 @@ follow the description as artistically as possible, there needs to be a download
           model: 'gpt-3.5-turbo-0125',
           temperature: 0.5,
         });
-				setLoading(false);
+        setPrompting(false);
         //console.log(completion.choices[0].message.content);
         setHtml(completion.choices[0].message.content);
       } catch (error) {
@@ -199,14 +203,20 @@ follow the description as artistically as possible, there needs to be a download
           </div>
         )}
         <div
-          className={`w-${isCustomTemplate ? 'full' : '3/4'} h-full flex flex-col items-center justify-between`}
+          className={`w-${isCustomTemplate ? 'full' : '3/4'} h-full flex items-center justify-between`}
         >
           {isCustomTemplate && (
-            <div className="w-full flex gap-2">
+            <div className="w-full gap-2">
+						<TextField name="subject" onChange={e => setSubject(e)} className="w-full">
+						<Label>Enter Subject Line</Label>
+						<Input className="w-full border-2 rounded-lg"/>
+						</TextField>
+						<h1 className="text-md mt-px">Enter Prompt</h1>
+						<div className="flex">
               <textarea
                 value={prompt}
                 onChange={e => setPrompt(e.target.value)}
-                className="w-full border-2 border-gray-300 rounded-lg p-2"
+                className="w-full h-[35vh] border-2 border-gray-300 rounded-lg p-2"
                 placeholder="Type your prompt here"
               />
               <Button
@@ -215,9 +225,17 @@ follow the description as artistically as possible, there needs to be a download
                 }`}
                 onClick={onPrompt}
               >
-                {(loading && <div className="spinner w-8 h-8" />) || (
+                {(prompting && <div className="spinner w-8 h-8" />) || (
                   <h1>Prompt</h1>
                 )}
+              </Button>
+						</div>
+
+              <Button
+                className="bg-sky-400 rounded-full font-bold text-white text-xl w-full py-3 mt-4 hover:bg-sky-500 transition-colors duration-300"
+                onPress={handleSubmit}
+              >
+                Send Mail
               </Button>
             </div>
           )}
@@ -231,12 +249,6 @@ follow the description as artistically as possible, there needs to be a download
             dangerouslySetInnerHTML={{__html: html}}
             className="w-full h-full p-4"
           />
-          <Button
-            className="bg-sky-400 rounded-full font-bold text-white text-xl w-full py-3 mt-4 hover:bg-sky-500 transition-colors duration-300"
-            onPress={handleSubmit}
-          >
-            Send Mail
-          </Button>
         </div>
         {loading && (
           <div className="absolute bg-white h-40 w-[30vw] right-0 bottom-2 border-4 border-blue-400 rounded-xl flex justify-center items-center">
