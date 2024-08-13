@@ -4,7 +4,7 @@ import Link from 'next/link';
 export default function Home() {
   return (
     <div className="w-full h-full">
-      <div className="w-full h-[70vh] py-4 md:h-[58vh] md:flex md:justify-center bg-white">
+      <div className="w-full h-fit py-4 md:h-[58vh] md:flex md:justify-center bg-white">
         <Image
           src="/certImage.png"
           alt="certificate example"
@@ -29,13 +29,13 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div className="w-full h-fit flex gap-4 items-center justify-center bg-sky-500 md:px-10 py-10">
-        <div className="text-black md:w-1/2 bg-white md:py-5 py-3 rounded-xl border-black border-2 mx-6">
+      <div className="w-full h-fit flex gap-4 items-center justify-center bg-sky-300 md:px-10 py-20">
+        <div className="text-black md:w-1/2 bg-white md:py-7 py-3 rounded-xl border-black border-2 mx-6">
           <div>
             <h1 className="underline font-bold text-3xl md:text-4xl text-center text-sky-400">
               Step 1
             </h1>
-            <p className="px-8 mt-4 text-xl md:text-2xl font-semibold ">
+            <p className="px-8 mt-4 text-xl md:text-xl">
               Upload your recipient Names and Emails.
               <span className="font-extrabold underline">
                 Your user data is NEVER stored on our servers.
@@ -52,30 +52,30 @@ export default function Home() {
           className="hidden md:block shadow-black/35 shadow-xl hover:scale-105 transition-all ease-in-out duration-500 rounded-lg"
         />
       </div>
-      <div className="w-full h-fit flex gap-4 items-center justify-center bg-white md:px-10 py-10">
+      <div className="w-full h-fit flex gap-4 items-center justify-center bg-white md:px-10 py-20">
         <Image
           src="/step2.png"
           alt="certificate example"
           height={500}
           width={500}
-          className="hidden md:block shadow-black/35 shadow-xl hover:scale-105 transition-all ease-in-out duration-500 rounded-lg"
+          className="hidden md:block shadow-black/35 shadow-xl hover:scale-110 transition-all ease-in-out duration-500 rounded-lg"
         />
-        <div className="text-black md:w-1/2 bg-white md:py-8 py-3 rounded-xl border-sky-500 md:border-dashed border-2 mx-6">
+        <div className="text-black md:w-1/2 bg-white md:py-9 py-3 rounded-xl border-sky-500 md:border-dashed border-2 mx-6">
           <h1 className="underline font-bold text-3xl md:text-4xl text-sky-500 text-center">
             Step 2
           </h1>
-          <p className="px-8 mt-4 text-xl md:text-2xl font-semibold">
+          <p className="px-8 mt-4 text-xl md:text-xl">
             Customize certificate templates according to your needs or upload
             your own, add extra text fields as needed !
           </p>
         </div>
       </div>
-      <div className="w-full h-fit flex gap-4 items-center justify-center bg-sky-500 md:px-10 py-10">
-        <div className="text-black md:w-1/2 bg-white md:py-6 py-3 rounded-xl border-black border-2 mx-6">
+      <div className="w-full h-fit flex gap-4 items-center justify-center bg-sky-300 md:px-10 py-20">
+        <div className="text-black md:w-1/2 bg-white md:py-12 py-3 rounded-xl border-black border-2 mx-6">
           <h1 className="underline font-bold text-3xl md:text-4xl text-sky-500 text-center">
             Step 3
           </h1>
-          <p className="px-8 mt-4 text-xl md:text-2xl font-semibold">
+          <p className="px-8 mt-4 text-xl md:text-xl">
             Choose an email template or make your own HTML template using our{' '}
             <span className="underline font-extrabold">AI tool</span>, and send
             mails with press of a button !
@@ -103,13 +103,13 @@ export default function Home() {
           className="my-4"
         />
         <div className="border-2 w-full border-b-gray-300 my-4" />
-        <div className="flex justify-between w-full my-4">
-          <div className="w-1/2">
+        <div className="flex gap-[10vw] w-full my-4">
+          <div className="text-left">
             <h1 className="font-bold">Contact Us</h1>
             <p>support@credcraft.app</p>
             <p>sponsorship@credcraft.app</p>
           </div>
-          <div>
+          <div className="text-left">
             <h1 className="font-bold">Socials</h1>
             <p>X.com</p>
             <p>Medial</p>

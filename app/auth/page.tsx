@@ -55,6 +55,7 @@ export default function Auth({}) {
       {
         name: username,
         password: password,
+				email : email
       },
     );
     setLoading(false);

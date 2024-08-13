@@ -3,6 +3,7 @@ import {Inter} from 'next/font/google';
 import Link from 'next/link';
 import './globals.css';
 import dotenv from 'dotenv';
+import Head from 'next/head'
 import store from '../store';
 import {Provider} from 'react-redux';
 
@@ -22,16 +23,26 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} w-screen h-screen flex flex-col md:items-center`}>
-        <div className="w-full md:mt-4 flex flex-row justify-between items-center py-4 px-4 md:px-[6vw] bg-white shadow-md shadow-black/5 z-20 md:rounded-r-full md:rounded-l-full">
-          <h1 className="text-sky-500 text-xl md:text-4xl font-bold">CredCraft</h1>
+		 <head>
+        <link rel="icon" href="/CredCraftFavicon.png" />
+        {/* You can also add other meta tags here */}
+      </head>
+      <body
+        className={`${inter.className} w-screen h-screen flex flex-col md:items-center`}
+      >
+        <div className="w-full md:w-[85vw] md:mt-4 flex flex-row justify-between items-center py-4 px-4 bg-white shadow-md shadow-black/5 z-20 md:rounded-r-full md:rounded-l-full md:fixed md:mx-[6vw] bg-transparent bg-blend-difference backdrop-blur-md">
+          <Link href="/">
+            <h1 className="text-sky-500 text-xl md:text-4xl font-bold bg-white rounded-r-full rounded-l-full md:px-10 md:py-2">
+              CredCraft
+            </h1>
+          </Link>
           <Link href="/auth">
-            <h2 className="text-lg md:text-xl text-sky-500 border-2 border-sky-500 rounded-full px-3 md:px-6 md:py-2 hover:bg-sky-500 hover:text-white transition-colors duration-300">
+            <h2 className="text-lg md:text-xl text-white font-semibold border-2 border-sky-500 rounded-full px-3 md:px-6 md:py-2 hover:bg-sky-500 hover:text-white transition-colors duration-300 bg-sky-500">
               Login / SignUp
             </h2>
           </Link>
         </div>
-        <div className="h-full w-full flex flex-col items-center gap-4 justify-center bg-white flex-grow md:px-[6vw]">
+        <div className="h-full w-full flex flex-col items-center gap-4 justify-center bg-white flex-grow md:px-[6vw] md:mt-[16vh]">
           {children}
         </div>
       </body>
