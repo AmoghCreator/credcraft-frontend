@@ -196,7 +196,7 @@ export default function UploadData() {
                   key={num}
                 >
                   <h1>{elm[keys[0]]}</h1>
-                  <h1>{elm[keys[2]]}</h1>
+                  <h1>{elm[keys[1]]}</h1>
 									{/*<h1>{elm[keys[2]]}</h1>*/}
                 </div>
               ))}
