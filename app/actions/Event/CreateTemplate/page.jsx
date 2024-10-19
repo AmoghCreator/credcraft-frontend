@@ -87,7 +87,7 @@ const PdfCreator = () => {
   function handleXaxis(slideValue) {
     setFormData(prevData => ({
       ...prevData,
-      xPos: slideValue,
+      xPos: -slideValue,
     }));
   }
 
